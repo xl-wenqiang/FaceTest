@@ -1,5 +1,5 @@
-import sys
-sys.path.insert(0, '/path/to/dlib')
+# import sys
+# sys.path.insert(0, '/path/to/dlib')
 
 import cv2
 import dlib
