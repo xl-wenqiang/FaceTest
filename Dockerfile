@@ -44,4 +44,4 @@ RUN pip3 install --trusted-host pypi.python.org -r requirements.txt
 COPY . /app
 
 # Run app.py when the container launches
-CMD ["python3", "app.py"]
+CMD ["python3", "faceapi.py"]

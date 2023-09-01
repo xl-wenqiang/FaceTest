@@ -1,9 +1,4 @@
-# import sys
-# sys.path.insert(0, '/path/to/dlib')
-
-import cv2
-import dlib
-from skimage import io
+import cv2, dlib, skimage.io
 
 # 初始化人脸检测模型及特征点检测模型
 detector = dlib.get_frontal_face_detector()
@@ -28,16 +23,8 @@ def check_face_quality(image_path):
     # 检测美颜
     landmarks = predictor(gray, faces[0])
     # 检测特定的面部特征点，比如嘴巴、眉毛等
-    # 根据特征点的位置判断是否使用了美颜
-    # if is_beauty(face_landmarks):
-    #     return False
 
     return True
-
-# 判断是否使用了美颜
-def is_beauty(face_landmarks):
-    # 根据特征点的位置判断是否使用了美颜的逻辑
-    return False
 
 # 注册人脸
 def register_face(image_path, name):
