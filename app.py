@@ -3,11 +3,12 @@
 
 import cv2
 import dlib
-
+from skimage import io
 
 # 初始化人脸检测模型及特征点检测模型
 detector = dlib.get_frontal_face_detector()
 predictor = dlib.shape_predictor("shape_predictor_68_face_landmarks.dat")
+face_recognition_model = dlib.face_recognition_model_v1("dlib_face_recognition_resnet_model_v1.dat")
 
 # 检测人脸质量
 def check_face_quality(image_path):
@@ -48,7 +49,39 @@ def register_face(image_path, name):
     else:
         print(f"{name}的人脸质量不符合要求，注册失败！")
 
+def face_distance(face_descriptor1, face_descriptor2):
+    return np.linalg.norm(face_descriptor1 - face_descriptor2)
+
+# 加载图片，并对每张图片进行人脸检测和特征提取
+def extract_face_features(image_path):
+    image = io.imread(image_path)
+    dets = detector(image, 1)
+
+    if len(dets) == 0:
+        return None
+
+    shape = predictor(image, dets[0])
+    face_descriptor = np.array(face_recognition_model.compute_face_descriptor(image, shape))
+    return face_descriptor
+
+# 定义比较两张图片的人脸相似度的接口
+def compare_faces(image_path1, image_path2):
+    face_descriptor1 = extract_face_features(image_path1)
+    face_descriptor2 = extract_face_features(image_path2)
+
+    if face_descriptor1 is None or face_descriptor2 is None:
+        return None
+
+    distance = face_distance(face_descriptor1, face_descriptor2)
+    return distance
 
 image_path = "81800_1986-06-13_2011.jpg"
 name = "Alice"
 register_face(image_path, name)
+
+
+# 使用示例
+# image_path1 = 'path_to_image1.jpg'
+# image_path2 = 'path_to_image2.jpg'
+# distance = compare_faces(image_path1, image_path2)
+# print(distance)
